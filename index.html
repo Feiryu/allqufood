@@ -37,7 +37,7 @@
             <label>1. Categoría:</label>
             <select id="categoria">
                 <option value="Premio">Premio</option>
-                <option value="Comida">Comida</option>
+                <option value="Comida">Croqueta</option>
             </select>
         </div>
 
@@ -64,7 +64,8 @@
             🌿 Enviado en empaques biodegradables para cuidar el planeta.
         </div>
 
-        <input type="text" id="clienteNombre" placeholder="Tu Nombre y Celular">
+        <input type="text" id="clienteNombre" placeholder="Tu Nombre">
+        <input type="text" id="clientecelular" placeholder="Tu Celular">
         <button class="btn-enviar" onclick="procesarPedido()">Registrar Pedido</button>
     </div>
 
@@ -85,6 +86,7 @@
             <thead>
                 <tr style="background: #f8f9fa;">
                     <th>Cliente</th>
+                    <th>Numero</th>
                     <th>Categoría</th>
                     <th>Sabor</th>
                     <th>Tamaño</th>
@@ -100,75 +102,85 @@
 
 <script>
     // Precios configurados según tu lista
-    const listaPrecios = {
-        "Higado": { "Mega": 15, "Maxi": 7.5, "Medium": 5, "Mini": 2.5 },
-        "Carne": { "Mega": 24, "Maxi": 12, "Medium": 8, "Mini": 4 }
-    };
+const listaPrecios = {
+    "Higado": { "Mega": 15, "Maxi": 7.5, "Medium": 5, "Mini": 2.5 },
+    "Carne": { "Mega": 24, "Maxi": 12, "Medium": 8, "Mini": 4 }
+};
 
-    const ingredientes = {
-        "Higado": "Ingredientes: Hígado de pollo, huevo, avena, aceite de oliva y camote.",
-        "Carne": "Ingredientes: Carne molida, huevo, avena, aceite de oliva y camote."
-    };
+const ingredientes = {
+    "Higado": "Ingredientes: Hígado de pollo, huevo, avena, aceite de oliva y camote.",
+    "Carne": "Ingredientes: Carne molida, huevo, avena, aceite de oliva y camote."
+};
 
-    function mostrarIngredientes() {
-        const sabor = document.getElementById('sabor').value;
-        document.getElementById('txt-ingredientes').innerText = ingredientes[sabor];
+function mostrarIngredientes() {
+    const sabor = document.getElementById('sabor').value;
+    document.getElementById('txt-ingredientes').innerText = ingredientes[sabor];
+}
+
+// Al cargar la página
+let historial = JSON.parse(localStorage.getItem('pedidos_allqu')) || [];
+mostrarIngredientes();
+dibujarTabla();
+
+function procesarPedido() {
+    // CORRECCIÓN AQUÍ: Los IDs deben coincidir exactamente con el HTML
+    const nombre = document.getElementById('clienteNombre').value;
+    const celular = document.getElementById('clientecelular').value; 
+    const cat = document.getElementById('categoria').value;
+    const sab = document.getElementById('sabor').value;
+    const tam = document.getElementById('tamano').value;
+
+    if (!nombre || !celular) { 
+        return alert("Por favor ingresa tu nombre y celular"); 
     }
 
-    // Al cargar la página
-    let historial = JSON.parse(localStorage.getItem('pedidos_allqu')) || [];
-    mostrarIngredientes();
+    const precioFinal = listaPrecios[sab][tam];
+    
+    const pedido = {
+        cliente: nombre,
+        numero: celular, // Guardamos el celular
+        categoria: cat,
+        sabor: sab === "Higado" ? "Hígado de Pollo" : "Carne Molida",
+        tamano: tam + " Pack",
+        precio: "S/ " + precioFinal.toFixed(2),
+        fecha: new Date().toLocaleDateString()
+    };
+
+    historial.push(pedido);
+    localStorage.setItem('pedidos_allqu', JSON.stringify(historial));
+    
+    alert(`¡Gracias ${nombre}! Pedido registrado: ${pedido.sabor} (${pedido.tamano}) por ${pedido.precio}`);
+    
     dibujarTabla();
+    
+    // Limpiar campos
+    document.getElementById('clienteNombre').value = "";
+    document.getElementById('clientecelular').value = "";
+}
 
-    function procesarPedido() {
-        const nombre = document.getElementById('clienteNombre').value;
-        const cat = document.getElementById('categoria').value;
-        const sab = document.getElementById('sabor').value;
-        const tam = document.getElementById('tamano').value;
+function dibujarTabla() {
+    const tabla = document.getElementById('tabla-clientes');
+    // CORRECCIÓN AQUÍ: Usamos p.numero en minúsculas como se guardó arriba
+    tabla.innerHTML = historial.map(p => `
+        <tr>
+            <td>${p.cliente}</td>
+            <td>${p.numero}</td>
+            <td>${p.categoria}</td>
+            <td>${p.sabor}</td>
+            <td>${p.tamano}</td>
+            <td>${p.precio}</td>
+            <td>${p.fecha}</td>
+        </tr>
+    `).reverse().join(''); 
+}
 
-        if (!nombre) { return alert("Por favor ingresa tu nombre"); }
-
-        const precioFinal = listaPrecios[sab][tam];
-        
-        const pedido = {
-            cliente: nombre,
-            categoria: cat,
-            sabor: sab === "Higado" ? "Hígado de Pollo" : "Carne Molida",
-            tamano: tam + " Pack",
-            precio: "S/ " + precioFinal.toFixed(2),
-            fecha: new Date().toLocaleDateString()
-        };
-
-        historial.push(pedido);
-        localStorage.setItem('pedidos_allqu', JSON.stringify(historial));
-        
-        alert(`¡Gracias ${nombre}! Pedido registrado: ${pedido.sabor} (${pedido.tamano}) por ${pedido.precio}`);
-        
+function borrarHistorial() {
+    if(confirm("¿Deseas borrar los datos de clientes?")) {
+        localStorage.removeItem('pedidos_allqu');
+        historial = [];
         dibujarTabla();
-        document.getElementById('clienteNombre').value = ""; // Limpiar campo
     }
-
-    function dibujarTabla() {
-        const tabla = document.getElementById('tabla-clientes');
-        tabla.innerHTML = historial.map(p => `
-            <tr>
-                <td>${p.cliente}</td>
-                <td>${p.categoria}</td>
-                <td>${p.sabor}</td>
-                <td>${p.tamano}</td>
-                <td>${p.precio}</td>
-                <td>${p.fecha}</td>
-            </tr>
-        `).reverse().join(''); // El último pedido sale primero
-    }
-
-    function borrarHistorial() {
-        if(confirm("¿Deseas borrar los datos de clientes?")) {
-            localStorage.removeItem('pedidos_allqu');
-            historial = [];
-            dibujarTabla();
-        }
-    }
+}
 </script>
 
 </body>
