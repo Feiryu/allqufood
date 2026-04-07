@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Allqu Food - Salud en cada bocado</title>
+    <style>
+        :root { --principal: #8d6e63; --secundario: #4e342e; --acento: #2ecc71; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #fdfaf6; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; }
+        header { grid-column: span 2; text-align: center; background: var(--principal); color: white; padding: 20px; border-radius: 15px; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); border: 1px solid #e0e0e0; }
+        h2 { color: var(--secundario); border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
+        .opcion-grupo { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
+        select, input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 10px; font-size: 16px; }
+        .info-bio { background: #e8f5e9; padding: 10px; border-radius: 8px; border-left: 4px solid var(--acento); font-size: 0.9em; margin-bottom: 15px; }
+        .btn-enviar { background: var(--acento); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-enviar:hover { background: #27ae60; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85em; background: white; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        .admin-box { grid-column: span 2; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Allqu Food</h1>
+    <p><i>"Salud en cada bocado"</i></p>
+    <p>Producto 100% natural • Sin preservantes • Empaques biodegradables</p>
+</header>
+
+<div class="container">
+    <div class="card">
+        <h2>Arma tu Pedido</h2>
+        
+        <div class="opcion-grupo">
+            <label>1. Categoría:</label>
+            <select id="categoria">
+                <option value="Premio">Premio</option>
+                <option value="Comida">Comida</option>
+            </select>
+        </div>
+
+        <div class="opcion-grupo">
+            <label>2. Sabor (Ingredientes naturales):</label>
+            <select id="sabor" onchange="mostrarIngredientes()">
+                <option value="Higado">Hígado de Pollo</option>
+                <option value="Carne">Carne Molida</option>
+            </select>
+            <small id="txt-ingredientes" style="color: #666;"></small>
+        </div>
+
+        <div class="opcion-grupo">
+            <label>3. Tamaño del Pack:</label>
+            <select id="tamano">
+                <option value="Mega">Mega Pack (60 und / 300g)</option>
+                <option value="Maxi">Maxi Pack (30 und / 150g)</option>
+                <option value="Medium">Medium Pack (20 und / 100g)</option>
+                <option value="Mini">Mini Pack (10 und / 50g)</option>
+            </select>
+        </div>
+
+        <div class="info-bio">
+            🌿 Enviado en empaques biodegradables para cuidar el planeta.
+        </div>
+
+        <input type="text" id="clienteNombre" placeholder="Tu Nombre y Celular">
+        <button class="btn-enviar" onclick="procesarPedido()">Registrar Pedido</button>
+    </div>
+
+    <div class="card">
+        <h2>Resumen de Precios</h2>
+        <div style="font-size: 0.9em;">
+            <p><strong>Hígado:</strong> S/ 15, 7.50, 5, 2.50</p>
+            <p><strong>Carne:</strong> S/ 24, 12, 8, 4</p>
+            <hr>
+            <p>✅ 100% Natural</p>
+            <p>✅ Sin Conservantes</p>
+        </div>
+    </div>
+
+    <div class="card admin-box">
+        <h2>Panel de Preferencias de Clientes</h2>
+        <table>
+            <thead>
+                <tr style="background: #f8f9fa;">
+                    <th>Cliente</th>
+                    <th>Categoría</th>
+                    <th>Sabor</th>
+                    <th>Tamaño</th>
+                    <th>Precio</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-clientes"></tbody>
+        </table>
+        <button onclick="borrarHistorial()" style="background:none; border:none; color:red; cursor:pointer; margin-top:10px; font-size: 12px;">[Borrar Historial]</button>
+    </div>
+</div>
+
+<script>
+    // Precios configurados según tu lista
+    const listaPrecios = {
+        "Higado": { "Mega": 15, "Maxi": 7.5, "Medium": 5, "Mini": 2.5 },
+        "Carne": { "Mega": 24, "Maxi": 12, "Medium": 8, "Mini": 4 }
+    };
+
+    const ingredientes = {
+        "Higado": "Ingredientes: Hígado de pollo, huevo, avena, aceite de oliva y camote.",
+        "Carne": "Ingredientes: Carne molida, huevo, avena, aceite de oliva y camote."
+    };
+
+    function mostrarIngredientes() {
+        const sabor = document.getElementById('sabor').value;
+        document.getElementById('txt-ingredientes').innerText = ingredientes[sabor];
+    }
+
+    // Al cargar la página
+    let historial = JSON.parse(localStorage.getItem('pedidos_allqu')) || [];
+    mostrarIngredientes();
+    dibujarTabla();
+
+    function procesarPedido() {
+        const nombre = document.getElementById('clienteNombre').value;
+        const cat = document.getElementById('categoria').value;
+        const sab = document.getElementById('sabor').value;
+        const tam = document.getElementById('tamano').value;
+
+        if (!nombre) { return alert("Por favor ingresa tu nombre"); }
+
+        const precioFinal = listaPrecios[sab][tam];
+        
+        const pedido = {
+            cliente: nombre,
+            categoria: cat,
+            sabor: sab === "Higado" ? "Hígado de Pollo" : "Carne Molida",
+            tamano: tam + " Pack",
+            precio: "S/ " + precioFinal.toFixed(2),
+            fecha: new Date().toLocaleDateString()
+        };
+
+        historial.push(pedido);
+        localStorage.setItem('pedidos_allqu', JSON.stringify(historial));
+        
+        alert(`¡Gracias ${nombre}! Pedido registrado: ${pedido.sabor} (${pedido.tamano}) por ${pedido.precio}`);
+        
+        dibujarTabla();
+        document.getElementById('clienteNombre').value = ""; // Limpiar campo
+    }
+
+    function dibujarTabla() {
+        const tabla = document.getElementById('tabla-clientes');
+        tabla.innerHTML = historial.map(p => `
+            <tr>
+                <td>${p.cliente}</td>
+                <td>${p.categoria}</td>
+                <td>${p.sabor}</td>
+                <td>${p.tamano}</td>
+                <td>${p.precio}</td>
+                <td>${p.fecha}</td>
+            </tr>
+        `).reverse().join(''); // El último pedido sale primero
+    }
+
+    function borrarHistorial() {
+        if(confirm("¿Deseas borrar los datos de clientes?")) {
+            localStorage.removeItem('pedidos_allqu');
+            historial = [];
+            dibujarTabla();
+        }
+    }
+</script>
+
+</body>
+</html>
