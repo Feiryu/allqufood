@@ -35,9 +35,9 @@
         
         <div class="opcion-grupo">
             <label>1. Categoría:</label>
-            <select id="categoria">
-                <option value="Premio">Premio</option>
-                <option value="Comida">Croqueta</option>
+            <select id="categoria" onchange="actualizarTamanos()">
+                <option value="Premio">Premios</option>
+                <option value="Comida">Croquetas</option>
             </select>
         </div>
 
@@ -66,17 +66,27 @@
 
         <input type="text" id="clienteNombre" placeholder="Tu Nombre">
         <input type="text" id="clientecelular" placeholder="Tu Celular">
+        <input type="text" id="direccion" placeholder="Tu Dirección">
         <button class="btn-enviar" onclick="procesarPedido()">Registrar Pedido</button>
     </div>
 
     <div class="card">
         <h2>Resumen de Precios</h2>
         <div style="font-size: 0.9em;">
-            <p><strong>Hígado:</strong> S/ 15, 7.50, 5, 2.50</p>
-            <p><strong>Carne:</strong> S/ 24, 12, 8, 4</p>
+            <p><strong>Hígado:</strong><br>
+            Mega Pack: S/ 12<br>
+            Maxi Pack: S/ 7<br>
+            Medium Pack: S/ 4<br>
+            Mini Pack: S/ 2.50</p>
+            <p><strong>Carne:</strong><br>
+            Mega Pack: S/ 18<br>
+            Maxi Pack: S/ 10<br>
+            Medium Pack: S/ 7.50<br>
+            Mini Pack: S/ 4</p>
             <hr>
             <p>✅ 100% Natural</p>
             <p>✅ Sin Conservantes</p>
+            <p>✅ Empaques biodegradables</p>
         </div>
     </div>
 
@@ -85,8 +95,8 @@
         <table>
             <thead>
                 <tr style="background: #f8f9fa;">
+                    <th>Orden</th>
                     <th>Cliente</th>
-                    <th>Numero</th>
                     <th>Categoría</th>
                     <th>Sabor</th>
                     <th>Tamaño</th>
@@ -101,10 +111,10 @@
 </div>
 
 <script>
-    // Precios configurados según tu lista
+// 1. Configuración de Precios y Datos
 const listaPrecios = {
-    "Higado": { "Mega": 15, "Maxi": 7.5, "Medium": 5, "Mini": 2.5 },
-    "Carne": { "Mega": 24, "Maxi": 12, "Medium": 8, "Mini": 4 }
+    "Higado": { "Mega": 12, "Maxi": 7, "Medium": 4, "Mini": 2.5 },
+    "Carne": { "Mega": 18, "Maxi": 10, "Medium": 7.5, "Mini": 4 }
 };
 
 const ingredientes = {
@@ -112,59 +122,107 @@ const ingredientes = {
     "Carne": "Ingredientes: Carne molida, huevo, avena, aceite de oliva y camote."
 };
 
+// 2. Funciones de Interfaz
 function mostrarIngredientes() {
     const sabor = document.getElementById('sabor').value;
     document.getElementById('txt-ingredientes').innerText = ingredientes[sabor];
 }
 
-// Al cargar la página
+function actualizarTamanos() {
+    const categoria = document.getElementById('categoria').value;
+    const tamanoSelect = document.getElementById('tamano');
+    tamanoSelect.innerHTML = '';
+    const opciones = [
+        { value: 'Mega', text: categoria === 'Comida' ? 'Mega Pack (300g)' : 'Mega Pack (60 und / 300g)' },
+        { value: 'Maxi', text: categoria === 'Comida' ? 'Maxi Pack (150g)' : 'Maxi Pack (30 und / 150g)' },
+        { value: 'Medium', text: categoria === 'Comida' ? 'Medium Pack (100g)' : 'Medium Pack (20 und / 100g)' },
+        { value: 'Mini', text: categoria === 'Comida' ? 'Mini Pack (50g)' : 'Mini Pack (10 und / 50g)' }
+    ];
+    opciones.forEach(op => {
+        const option = document.createElement('option');
+        option.value = op.value;
+        option.text = op.text;
+        tamanoSelect.appendChild(option);
+    });
+}
+
+// 3. Lógica de Historial y Pedidos
 let historial = JSON.parse(localStorage.getItem('pedidos_allqu')) || [];
 mostrarIngredientes();
+actualizarTamanos();
 dibujarTabla();
 
+function obtenerSiguienteOrden() {
+    if (!historial.length) return 1;
+    const maxOrden = Math.max(...historial.map(p => p.orden || 0));
+    return maxOrden + 1;
+}
+
 function procesarPedido() {
-    // CORRECCIÓN AQUÍ: Los IDs deben coincidir exactamente con el HTML
     const nombre = document.getElementById('clienteNombre').value;
     const celular = document.getElementById('clientecelular').value; 
+    const direccion = document.getElementById('direccion').value;
     const cat = document.getElementById('categoria').value;
     const sab = document.getElementById('sabor').value;
     const tam = document.getElementById('tamano').value;
 
-    if (!nombre || !celular) { 
-        return alert("Por favor ingresa tu nombre y celular"); 
+    if (!nombre || !celular || !direccion) { 
+        return alert("Por favor completa Nombre, Celular y Dirección"); 
     }
 
     const precioFinal = listaPrecios[sab][tam];
-    
+    const saborTexto = sab === "Higado" ? "Hígado de Pollo" : "Carne Molida";
+    const packTexto = tam + " Pack";
+
     const pedido = {
+        orden: obtenerSiguienteOrden(),
         cliente: nombre,
-        numero: celular, // Guardamos el celular
+        numero: celular,
         categoria: cat,
-        sabor: sab === "Higado" ? "Hígado de Pollo" : "Carne Molida",
-        tamano: tam + " Pack",
+        sabor: saborTexto,
+        direccion: direccion,
+        tamano: packTexto,
         precio: "S/ " + precioFinal.toFixed(2),
         fecha: new Date().toLocaleDateString()
     };
 
+    // Guardar en historial local
     historial.push(pedido);
     localStorage.setItem('pedidos_allqu', JSON.stringify(historial));
-    
-    alert(`¡Gracias ${nombre}! Pedido registrado: ${pedido.sabor} (${pedido.tamano}) por ${pedido.precio}`);
-    
     dibujarTabla();
+
+    // mensaje directo para el whatsapp
+    const minum = "51948869912";
     
+    const mensajeTexto = 
+        ` ¡Nuevo Pedido de Allqu Food! \n\n` +
+        `Orden No: ${pedido.orden}\n` +
+        `Cliente: ${nombre}\n` +
+        `Producto: ${cat} de ${saborTexto}\n` +
+        `Tamaño: ${packTexto}\n` +
+        `Precio: ${pedido.precio}\n` +
+        `Dirección: ${direccion}\n` +
+        `Celular: ${celular}\n` +
+        `Fecha: ${pedido.fecha}\n\n` +
+        `¡Gracias por tu pedido!`;
+
+    const url = `https://wa.me/${minum}?text=${encodeURIComponent(mensajeTexto)}`;
+    
+    // Abrir WhatsApp en una nueva pestaña
+    window.open(url, '_blank');
+
     // Limpiar campos
     document.getElementById('clienteNombre').value = "";
     document.getElementById('clientecelular').value = "";
+    document.getElementById('direccion').value = "";
 }
 
 function dibujarTabla() {
     const tabla = document.getElementById('tabla-clientes');
-    // CORRECCIÓN AQUÍ: Usamos p.numero en minúsculas como se guardó arriba
     tabla.innerHTML = historial.map(p => `
         <tr>
+            <td>${p.orden}</td>
             <td>${p.cliente}</td>
-            <td>${p.numero}</td>
             <td>${p.categoria}</td>
             <td>${p.sabor}</td>
             <td>${p.tamano}</td>
