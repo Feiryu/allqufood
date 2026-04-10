@@ -2,72 +2,210 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Allqu Food - Salud en cada bocado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allqu Food - Salud en cada Bocado</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
-        :root { --principal: #8d6e63; --secundario: #4e342e; --acento: #2ecc71; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: #fdfaf6; color: #333; margin: 0; padding: 20px; }
-        .container { max-width: 900px; margin: auto; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; }
-        header { grid-column: span 2; text-align: center; background: var(--principal); color: white; padding: 20px; border-radius: 15px; }
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); border: 1px solid #e0e0e0; }
-        h2 { color: var(--secundario); border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
-        .opcion-grupo { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
-        select, input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 10px; font-size: 16px; }
-        .info-bio { background: #e8f5e9; padding: 10px; border-radius: 8px; border-left: 4px solid var(--acento); font-size: 0.9em; margin-bottom: 15px; }
-        .btn-enviar { background: var(--acento); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-enviar:hover { background: #27ae60; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.85em; background: white; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        .admin-box { grid-column: span 2; margin-top: 20px; }
+        :root { 
+            --principal: #8d6e63; 
+            --secundario: #4e342e; 
+            --acento: #2ecc71; 
+            --fondo: #fdfaf6;
+            --texto: #333;
+            --card-bg: #ffffff;
+        }
+
+        /* 2. Estilos Modo Oscuro */
+        body.dark-mode {
+            --fondo: #1a1a1a;
+            --texto: #f0f0f0;
+            --card-bg: #2d2d2d;
+            --principal: #5d4037;
+        }
+
+        body { 
+            font-family: 'Poppins', 'Segoe UI', sans-serif; 
+            background-color: var(--fondo); 
+            color: var(--texto); 
+            margin: 0; 
+            padding: 20px; 
+            transition: all 0.3s ease;
+        }
+
+        .container { max-width: 1000px; margin: auto; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 25px; }
+
+       header { 
+            grid-column: span 2; 
+            background: linear-gradient(135deg, var(--principal), var(--secundario)); 
+            color: white; 
+            padding: 30px 40px; /* Reduje un poco el padding vertical para balancear */
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            position: relative; /* Para el botón de modo oscuro */
+            display: flex;
+            justify-content: space-between; /* Nombre a la izq, info a la der */
+            align-items: center; /* Alineación vertical al centro */
+            text-align: left; /* Volvemos el texto a la izquierda */
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            width: 100%;
+            gap: 30px;
+        }
+
+        /* Contenedor para el logo y nombre (izquierda) */
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Espacio entre el icono y el texto */
+        }
+
+        /* Nombre de la empresa (Allqu Food) - ¡GRANDE! */
+        header h1 {
+            font-size: 3.2rem; /* Aumenté el tamaño significativamente */
+            font-weight: 800; /* Más gruesa para más peso */
+            margin: 0;
+            line-height: 1;
+        }
+        header h1 i { font-size: 2.8rem; margin-right: 5px;} /* Icono un poco más pequeño que el texto */
+
+        /* Contenedor para la información (derecha) */
+        .header-info {
+            text-align: right; /* Alineación a la derecha */
+            display: flex;
+            flex-direction: column; /* Eslogan arriba, beneficios abajo */
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 20px; /* Espacio entre eslogan y beneficios */
+            max-width: 50%; /* Evita que el texto de la derecha pise al nombre */
+            height: 100%;
+            min-height: 120px;
+        }
+
+        header p i {
+            font-size: 1.6rem; /* Aumenté el tamaño */
+            font-weight: 500;
+            margin: 0;
+            display: block;
+            opacity: 0.95;
+            line-height: 1.2;
+        }
+
+        /* Beneficios / Especificaciones (Abajo derecha) */
+        .header-benefits {
+            font-size: 1rem; /* Tamaño normal, legible */
+            opacity: 0.85;
+            display: flex;
+            gap: 15px; /* Espacio entre cada beneficio */
+            justify-content: flex-end; /* Alinear a la derecha */
+            flex-wrap: wrap; /* Para que no se corte en móviles */
+        }
+        .header-benefits span {
+            display: flex;
+            align-items: center;
+            gap: 5px; /* Espacio entre icono y texto */
+        }
+
+        /* 3. Diseño Premium de Tarjetas */
+        .card { 
+            background: var(--card-bg); 
+            padding: 25px; 
+            border-radius: 18px; 
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05); 
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        .card:hover { transform: translateY(-5px); }
+
+        h2 { color: var(--acento); font-size: 1.4rem; margin-top: 0; }
+
+        label { font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; display: block; opacity: 0.8; }
+
+        select, input { 
+            width: 100%; padding: 12px; border-radius: 10px; 
+            border: 2px solid #eee; margin-bottom: 15px; 
+            font-size: 15px; background: var(--card-bg); color: var(--texto);
+            box-sizing: border-box;
+        }
+
+        .btn-enviar { 
+            background: var(--acento); color: white; border: none; 
+            padding: 18px; width: 100%; border-radius: 12px; 
+            font-size: 18px; font-weight: bold; cursor: pointer; 
+            transition: 0.4s; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+        .btn-enviar:hover { background: #27ae60; transform: scale(1.02); }
+
+        /* Botón Modo Oscuro */
+        .theme-toggle {
+            position: fixed; top: 20px; right: 20px;
+            background: var(--principal); color: white;
+            border: none; padding: 12px; border-radius: 50%;
+            cursor: pointer; z-index: 1000;
+        }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; border-radius: 10px; overflow: hidden; }
+        th { background: var(--principal); color: white; padding: 12px; text-align: left; }
+        td { padding: 12px; border-bottom: 1px solid #eee; font-size: 0.85rem; }
+
+        .admin-box { grid-column: span 2; }
     </style>
 </head>
-<body>
+<body class="">
+
+<button class="theme-toggle" onclick="toggleDarkMode()">
+    <i id="theme-icon" class="fas fa-moon"></i>
+</button>
 
 <header>
-    <h1>Allqu Food</h1>
-    <p><i>"Salud en cada bocado"</i></p>
-    <p>Producto 100% natural • Sin preservantes • Empaques biodegradables</p>
+    <div class="header-content">
+        <div class="header-brand">
+            <h1><i class="fas fa-dog"></i>Allqu Food</h1>
+        </div>
+
+        <div class="header-info">
+            <p><i>"Salud en cada bocado"</i></p>
+            <div class="header-benefits">
+                <span><i class="fas fa-leaf"></i> 100% Natural</span>
+                <span><i class="fas fa-recycle"></i> Eco-Friendly</span>
+            </div>
+        </div>
+    </div>
 </header>
 
 <div class="container">
     <div class="card">
-        <h2>Arma tu Pedido</h2>
+        <h2><i class="fas fa-shopping-basket"></i> Arma tu Pedido</h2>
         
-        <div class="opcion-grupo">
-            <label>1. Categoría:</label>
-            <select id="categoria" onchange="actualizarTamanos()">
-                <option value="Premio">Premios</option>
-                <option value="Comida">Croquetas</option>
+        <label>1. Categoría:</label>
+        <select id="categoria" onchange="actualizarTamanos()">
+            <option value="Premio">Premios</option>
+            <option value="Comida">Croquetas</option>
+        </select>
+
+        <label>2. Sabor:</label>
+        <select id="sabor" onchange="mostrarIngredientes()">
+            <option value="Higado">Hígado de Pollo</option>
+            <option value="Carne">Carne Molida</option>
+        </select>
+        <div id="txt-ingredientes" style="font-size: 0.8rem; margin-bottom: 15px; color: var(--acento);"></div>
+
+        <label>3. Tamaño:</label>
+        <select id="tamano">
             </select>
-        </div>
 
-        <div class="opcion-grupo">
-            <label>2. Sabor (Ingredientes naturales):</label>
-            <select id="sabor" onchange="mostrarIngredientes()">
-                <option value="Higado">Hígado de Pollo</option>
-                <option value="Carne">Carne Molida</option>
-            </select>
-            <small id="txt-ingredientes" style="color: #666;"></small>
-        </div>
-
-        <div class="opcion-grupo">
-            <label>3. Tamaño del Pack:</label>
-            <select id="tamano">
-                <option value="Mega">Mega Pack (60 und / 300g)</option>
-                <option value="Maxi">Maxi Pack (30 und / 150g)</option>
-                <option value="Medium">Medium Pack (20 und / 100g)</option>
-                <option value="Mini">Mini Pack (10 und / 50g)</option>
-            </select>
-        </div>
-
-        <div class="info-bio">
-            🌿 Enviado en empaques biodegradables para cuidar el planeta.
-        </div>
-
-        <input type="text" id="clienteNombre" placeholder="Tu Nombre">
-        <input type="text" id="clientecelular" placeholder="Tu Celular">
-        <input type="text" id="direccion" placeholder="Tu Dirección">
-        <button class="btn-enviar" onclick="procesarPedido()">Registrar Pedido</button>
+        <input type="text" id="clienteNombre" placeholder="Nombre del dueño">
+        <input type="text" id="clientecelular" placeholder="Celular de contacto">
+        <input type="text" id="direccion" placeholder="Dirección de entrega">
+        
+        <button class="btn-enviar" onclick="procesarPedido()">
+            <i class="fab fa-whatsapp"></i> Enviar Pedido
+        </button>
     </div>
 
     <div class="card">
@@ -88,158 +226,153 @@
             <p>✅ Sin Conservantes</p>
             <p>✅ Empaques biodegradables</p>
         </div>
+
     </div>
 
     <div class="card admin-box">
-        <h2>Panel de Preferencias de Clientes</h2>
-        <table>
-            <thead>
-                <tr style="background: #f8f9fa;">
-                    <th>Orden</th>
-                    <th>Cliente</th>
-                    <th>Categoría</th>
-                    <th>Sabor</th>
-                    <th>Tamaño</th>
-                    <th>Precio</th>
-                    <th>Fecha</th>
-                </tr>
-            </thead>
-            <tbody id="tabla-clientes"></tbody>
-        </table>
-        <button onclick="borrarHistorial()" style="background:none; border:none; color:red; cursor:pointer; margin-top:10px; font-size: 12px;">[Borrar Historial]</button>
+        <h2><i class="fas fa-history"></i> Historial de Pedidos</h2>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Cliente</th>
+                        <th>Producto</th>
+                        <th>Tamaño</th>
+                        <th>Precio</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-clientes"></tbody>
+            </table>
+        </div>
+        <button onclick="borrarHistorial()" style="color: #e74c3c; background: none; border: none; cursor: pointer; margin-top: 15px;">
+            <i class="fas fa-trash"></i> Limpiar historial
+        </button>
     </div>
 </div>
 
 <script>
-// 1. Configuración de Precios y Datos
 const listaPrecios = {
     "Higado": { "Mega": 12, "Maxi": 7, "Medium": 4, "Mini": 2.5 },
     "Carne": { "Mega": 18, "Maxi": 10, "Medium": 7.5, "Mini": 4 }
 };
 
 const ingredientes = {
-    "Higado": "Ingredientes: Hígado de pollo, huevo, avena, aceite de oliva y camote.",
-    "Carne": "Ingredientes: Carne molida, huevo, avena, aceite de oliva y camote."
+    "Higado": "Hígado de pollo, huevo, avena, aceite de oliva y camote.",
+    "Carne": "Carne molida, huevo, avena, aceite de oliva y camote."
 };
 
-// 2. Funciones de Interfaz
+// modo oscuro
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    const icon = document.getElementById('theme-icon');
+    if(document.body.classList.contains('dark-mode')) {
+        icon.classList.replace('fa-moon', 'fa-sun');
+    } else {
+        icon.classList.replace('fa-sun', 'fa-moon');
+    }
+}
+
 function mostrarIngredientes() {
     const sabor = document.getElementById('sabor').value;
-    document.getElementById('txt-ingredientes').innerText = ingredientes[sabor];
+    document.getElementById('txt-ingredientes').innerHTML = `<i class="fas fa-info-circle"></i> ${ingredientes[sabor]}`;
 }
 
 function actualizarTamanos() {
-    const categoria = document.getElementById('categoria').value;
-    const tamanoSelect = document.getElementById('tamano');
-    tamanoSelect.innerHTML = '';
-    const opciones = [
-        { value: 'Mega', text: categoria === 'Comida' ? 'Mega Pack (300g)' : 'Mega Pack (60 und / 300g)' },
-        { value: 'Maxi', text: categoria === 'Comida' ? 'Maxi Pack (150g)' : 'Maxi Pack (30 und / 150g)' },
-        { value: 'Medium', text: categoria === 'Comida' ? 'Medium Pack (100g)' : 'Medium Pack (20 und / 100g)' },
-        { value: 'Mini', text: categoria === 'Comida' ? 'Mini Pack (50g)' : 'Mini Pack (10 und / 50g)' }
+    const cat = document.getElementById('categoria').value;
+    const select = document.getElementById('tamano');
+    select.innerHTML = '';
+    const opts = [
+        {v:'Mega', t: cat==='Comida' ? 'Mega Pack (300g)' : 'Mega Pack (60 und)'},
+        {v:'Maxi', t: cat==='Comida' ? 'Maxi Pack (150g)' : 'Maxi Pack (30 und)'},
+        {v:'Medium', t: cat==='Comida' ? 'Medium Pack (100g)' : 'Medium Pack (20 und)'},
+        {v:'Mini', t: cat==='Comida' ? 'Mini Pack (50g)' : 'Mini Pack (10 und)'}
     ];
-    opciones.forEach(op => {
-        const option = document.createElement('option');
-        option.value = op.value;
-        option.text = op.text;
-        tamanoSelect.appendChild(option);
+    opts.forEach(o => {
+        let opt = document.createElement('option');
+        opt.value = o.v; opt.text = o.t;
+        select.appendChild(opt);
     });
 }
 
-// 3. Lógica de Historial y Pedidos
 let historial = JSON.parse(localStorage.getItem('pedidos_allqu')) || [];
-mostrarIngredientes();
 actualizarTamanos();
+mostrarIngredientes();
 dibujarTabla();
 
-function obtenerSiguienteOrden() {
-    if (!historial.length) return 1;
-    const maxOrden = Math.max(...historial.map(p => p.orden || 0));
-    return maxOrden + 1;
-}
-
 function procesarPedido() {
-    const nombre = document.getElementById('clienteNombre').value;
-    const celular = document.getElementById('clientecelular').value; 
-    const direccion = document.getElementById('direccion').value;
-    const cat = document.getElementById('categoria').value;
+    const nom = document.getElementById('clienteNombre').value;
+    const cel = document.getElementById('clientecelular').value;
+    const dir = document.getElementById('direccion').value;
     const sab = document.getElementById('sabor').value;
     const tam = document.getElementById('tamano').value;
+    const cat = document.getElementById('categoria').value;
 
-    if (!nombre || !celular || !direccion) { 
-        return alert("Por favor completa Nombre, Celular y Dirección"); 
+    if (!nom || !cel || !dir) {
+        Swal.fire({ icon: 'warning', title: 'Campos incompletos', text: 'Por favor, llena todos los datos de contacto.', confirmButtonColor: '#8d6e63' });
+        return;
     }
 
-    const precioFinal = listaPrecios[sab][tam];
-    const saborTexto = sab === "Higado" ? "Hígado de Pollo" : "Carne Molida";
-    const packTexto = tam + " Pack";
-
+    const precio = listaPrecios[sab][tam];
     const pedido = {
-        orden: obtenerSiguienteOrden(),
-        cliente: nombre,
-        numero: celular,
-        categoria: cat,
-        sabor: saborTexto,
-        direccion: direccion,
-        tamano: packTexto,
-        precio: "S/ " + precioFinal.toFixed(2),
+        orden: historial.length + 1,
+        cliente: nom,
+        sabor: sab === "Higado" ? "Hígado de Pollo" : "Carne Molida",
+        tamano: tam,
+        precio: "S/ " + precio.toFixed(2),
         fecha: new Date().toLocaleDateString()
     };
 
-    // Guardar en historial local
     historial.push(pedido);
     localStorage.setItem('pedidos_allqu', JSON.stringify(historial));
     dibujarTabla();
 
-    // mensaje directo para el whatsapp
-    const minum = "51948869912";
-    
-    const mensajeTexto = 
-        ` ¡Nuevo Pedido de Allqu Food! \n\n` +
-        `Orden No: ${pedido.orden}\n` +
-        `Cliente: ${nombre}\n` +
-        `Producto: ${cat} de ${saborTexto}\n` +
-        `Tamaño: ${packTexto}\n` +
-        `Precio: ${pedido.precio}\n` +
-        `Dirección: ${direccion}\n` +
-        `Celular: ${celular}\n` +
-        `Fecha: ${pedido.fecha}\n\n` +
-        `¡Gracias por tu pedido!`;
-
-    const url = `https://wa.me/${minum}?text=${encodeURIComponent(mensajeTexto)}`;
-    
-    // Abrir WhatsApp en una nueva pestaña
-    window.open(url, '_blank');
-
-    // Limpiar campos
-    document.getElementById('clienteNombre').value = "";
-    document.getElementById('clientecelular').value = "";
-    document.getElementById('direccion').value = "";
+    // toda la parte de whatsapp
+    Swal.fire({
+        title: '¡Excelente elección!',
+        text: "Te estamos redirigiendo a WhatsApp para confirmar tu pedido.",
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 2500,
+        didOpen: () => {
+            const msg = `🐾 *¡Nuevo Pedido Allqu Food!* 🐾\n\n*Cliente:* ${nom}\n*Producto:* ${cat} de ${pedido.sabor}\n*Presentación:* ${tam} Pack\n*Total:* ${pedido.precio}\n*Dirección:* ${dir}\n\n¡Gracias! 🐶`;
+            const url = `https://wa.me/51948869912?text=${encodeURIComponent(msg)}`;
+            setTimeout(() => { window.open(url, '_blank'); }, 2000);
+        }
+    });
 }
 
 function dibujarTabla() {
-    const tabla = document.getElementById('tabla-clientes');
-    tabla.innerHTML = historial.map(p => `
+    const t = document.getElementById('tabla-clientes');
+    t.innerHTML = historial.map(p => `
         <tr>
             <td>${p.orden}</td>
             <td>${p.cliente}</td>
-            <td>${p.categoria}</td>
             <td>${p.sabor}</td>
             <td>${p.tamano}</td>
             <td>${p.precio}</td>
             <td>${p.fecha}</td>
         </tr>
-    `).reverse().join(''); 
+    `).reverse().join('');
 }
 
 function borrarHistorial() {
-    if(confirm("¿Deseas borrar los datos de clientes?")) {
-        localStorage.removeItem('pedidos_allqu');
-        historial = [];
-        dibujarTabla();
-    }
+    Swal.fire({
+        title: '¿Borrar todo?',
+        text: "Se eliminará el historial de este dispositivo.",
+        icon: 'danger',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, borrar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            localStorage.removeItem('pedidos_allqu');
+            historial = [];
+            dibujarTabla();
+        }
+    });
 }
 </script>
-
 </body>
 </html>
