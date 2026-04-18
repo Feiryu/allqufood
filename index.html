@@ -3,10 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Allqu Food - Salud Premium</title>
+    <title>Allqu Food</title>
+
+    <meta property="og:title" content="Allqu Food - Salud en cada bocado">
+    <meta property="og:description" content="Premios y croquetas naturales para tu mejor amigo. 🐾">
+    <meta property="og:image" content="https://feiryu.github.io/allqufood/logo-allqu-food.png">
+    <meta property="og:url" content="https://feiryu.github.io/allqufood/">
+    <meta property="og:type" content="website">
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="logo-allqu-food.png">
+
     <style>
         :root { 
             --principal: #8d6e63; 
@@ -24,14 +33,13 @@
             --principal: #5d4037;
         }
 
-        /* --- ANIMACIONES RECUPERADAS --- */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         body { 
-            font-family: 'Poppins', 'Segoe UI', sans-serif; 
+            font-family: 'Poppins', sans-serif; 
             background-color: var(--fondo); 
             color: var(--texto); 
             margin: 0; 
@@ -62,7 +70,6 @@
             border: 1px solid rgba(0,0,0,0.05);
             animation: fadeInUp 0.6s ease-out both;
         }
-        /* Retraso de animación para cada tarjeta */
         .card:nth-child(2) { animation-delay: 0.2s; }
         .card:nth-child(3) { animation-delay: 0.4s; }
 
@@ -93,9 +100,10 @@
         .btn-enviar:hover { background: #27ae60; transform: scale(1.02); }
 
         .cart-item {
-            background: rgba(46, 204, 113, 0.1); padding: 10px; border-radius: 8px;
+            background: rgba(46, 204, 113, 0.1); padding: 12px; border-radius: 10px;
             margin-bottom: 10px; font-size: 0.9rem;
-            display: flex; justify-content: space-between; border-left: 4px solid var(--acento);
+            display: flex; justify-content: space-between; align-items: center;
+            border-left: 4px solid var(--acento);
         }
 
         .theme-toggle { position: fixed; top: 20px; right: 20px; background: var(--principal); color: white; border: none; padding: 12px; border-radius: 50%; cursor: pointer; z-index: 1000; }
@@ -109,8 +117,8 @@
 
 <header>
     <div class="header-brand"><h1><i class="fas fa-dog"></i> Allqu Food</h1></div>
-    <div class="header-info">
-        <p><i>"Salud en cada bocado"</i></p>
+    <div class="header-info" style="text-align: right;">
+        <p style="margin:0;"><i>"Salud en cada bocado"</i></p>
         <div style="font-size: 0.8rem; opacity: 0.9;">
             <span><i class="fas fa-leaf"></i> 100% Natural</span> | 
             <span><i class="fas fa-recycle"></i> Eco-Friendly</span>
@@ -151,8 +159,7 @@
             <i class="fas fa-plus-circle"></i> Agregar otro producto
         </button>
 
-        <div id="resumen-temporal">
-            </div>
+        <div id="resumen-temporal"></div>
 
         <h2 style="margin-top:20px;"><i class="fas fa-user-edit"></i> 2. Datos del Cliente</h2>
         <input type="text" id="clienteNombre" placeholder="Nombre del dueño">
@@ -232,13 +239,11 @@ function agregarAlCarrito() {
     const precioUnitario = listaPrecios[sab][tam];
     const subtotal = precioUnitario * cant;
 
-    const item = {
+    carrito.push({
         descripcion: `${cat} de ${sab === "Higado" ? "Hígado" : "Carne"} (${tam})`,
         cantidad: cant,
         total: subtotal
-    };
-
-    carrito.push(item);
+    });
     renderizarCarrito();
     
     Swal.fire({
@@ -261,7 +266,7 @@ function renderizarCarrito() {
     let html = "<div style='margin-top:15px; margin-bottom:10px;'><strong>Tu bolsa actual:</strong></div>";
     carrito.forEach((item, index) => {
         html += `
-            <div class="cart-item" style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="cart-item">
                 <div>
                     <span>${item.cantidad}x ${item.descripcion}</span><br>
                     <small>S/ ${item.total.toFixed(2)}</small>
@@ -275,23 +280,9 @@ function renderizarCarrito() {
     div.innerHTML = html;
 }
 
-// Nueva función para eliminar el producto
 function quitarDelCarrito(index) {
-    carrito.splice(index, 1); // Elimina el producto del arreglo por su posición
-    renderizarCarrito(); // Vuelve a dibujar la lista actualizada
-    
-    // Notificación rápida de que se eliminó
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 1000,
-        timerProgressBar: false
-    });
-    Toast.fire({
-        icon: 'info',
-        title: 'Producto quitado'
-    });
+    carrito.splice(index, 1);
+    renderizarCarrito();
 }
 
 function finalizarPedido() {
@@ -299,13 +290,8 @@ function finalizarPedido() {
     const cel = document.getElementById('clientecelular').value;
     const dir = document.getElementById('direccion').value;
 
-    if (carrito.length === 0) {
-        Swal.fire('Bolsa vacía', 'Agrega al menos un producto antes de enviar.', 'warning');
-        return;
-    }
-
-    if (!nom || !cel || !dir) {
-        Swal.fire('Datos incompletos', 'Por favor llena la sección de Datos del Cliente.', 'warning');
+    if (carrito.length === 0 || !nom || !cel || !dir) {
+        Swal.fire('Atención', 'Por favor completa tus datos y agrega productos.', 'warning');
         return;
     }
 
@@ -316,31 +302,19 @@ function finalizarPedido() {
         totalVenta += item.total;
     });
 
-    const msg = `¡Nuevo Pedido Allqu Food!\n\n` +
-                `Cliente: ${nom}\n` +
-                `Celular: ${cel}\n` +
-                `Dirección: ${dir}\n\n` +
-                `Detalle del pedido:\n${detalleMsg}\n` +
-                `TOTAL A PAGAR: S/ ${totalVenta.toFixed(2)}\n\n` +
-                `¡Muchas gracias! Esperamos que tu peludo disfrute su comida saludable.`;
+    const msg = `🐾 *¡Nuevo Pedido Allqu Food!* 🐾\n\n` +
+                `*Cliente:* ${nom}\n` +
+                `*Celular:* ${cel}\n` +
+                `*Dirección:* ${dir}\n\n` +
+                `*Detalle:*\n${detalleMsg}\n` +
+                `*TOTAL: S/ ${totalVenta.toFixed(2)}*\n\n` +
+                `¡Muchas gracias! 🐶`;
 
-    const url = `https://wa.me/51948869912?text=${encodeURIComponent(msg)}`;
-    
-    Swal.fire({
-        title: '¡Listo!',
-        text: "Te enviamos a WhatsApp para finalizar.",
-        icon: 'success',
-        timer: 2000,
-        showConfirmButton: false,
-        didClose: () => { window.open(url, '_blank'); }
-    });
+    window.open(`https://wa.me/51948869912?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
 function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
-    const icon = document.getElementById('theme-icon');
-    icon.classList.toggle('fa-moon');
-    icon.classList.toggle('fa-sun');
 }
 
 actualizarTamanos();
