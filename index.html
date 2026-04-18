@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Allqu Food - Salud en cada Bocado</title>
+    <title>Allqu Food - Salud Premium</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -17,12 +17,17 @@
             --card-bg: #ffffff;
         }
 
-        /* 2. Estilos Modo Oscuro */
         body.dark-mode {
             --fondo: #1a1a1a;
             --texto: #f0f0f0;
             --card-bg: #2d2d2d;
             --principal: #5d4037;
+        }
+
+        /* --- ANIMACIONES RECUPERADAS --- */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         body { 
@@ -36,95 +41,33 @@
 
         .container { max-width: 1000px; margin: auto; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 25px; }
 
-       header { 
+        header { 
             grid-column: span 2; 
             background: linear-gradient(135deg, var(--principal), var(--secundario)); 
             color: white; 
-            padding: 30px 40px; /* Reduje un poco el padding vertical para balancear */
+            padding: 30px 40px; 
             border-radius: 20px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            position: relative; /* Para el botón de modo oscuro */
-            display: flex;
-            justify-content: space-between; /* Nombre a la izq, info a la der */
-            align-items: center; /* Alineación vertical al centro */
-            text-align: left; /* Volvemos el texto a la izquierda */
-        }
-
-        .header-content {
             display: flex;
             justify-content: space-between;
-            align-items: stretch;
-            width: 100%;
-            gap: 30px;
-        }
-
-        /* Contenedor para el logo y nombre (izquierda) */
-        .header-brand {
-            display: flex;
             align-items: center;
-            gap: 15px; /* Espacio entre el icono y el texto */
+            animation: fadeInUp 0.6s ease-out both;
         }
 
-        /* Nombre de la empresa (Allqu Food) - ¡GRANDE! */
-        header h1 {
-            font-size: 3.2rem; /* Aumenté el tamaño significativamente */
-            font-weight: 800; /* Más gruesa para más peso */
-            margin: 0;
-            line-height: 1;
-        }
-        header h1 i { font-size: 2.8rem; margin-right: 5px;} /* Icono un poco más pequeño que el texto */
-
-        /* Contenedor para la información (derecha) */
-        .header-info {
-            text-align: right; /* Alineación a la derecha */
-            display: flex;
-            flex-direction: column; /* Eslogan arriba, beneficios abajo */
-            justify-content: space-between;
-            align-items: flex-end;
-            gap: 20px; /* Espacio entre eslogan y beneficios */
-            max-width: 50%; /* Evita que el texto de la derecha pise al nombre */
-            height: 100%;
-            min-height: 120px;
-        }
-
-        header p i {
-            font-size: 1.6rem; /* Aumenté el tamaño */
-            font-weight: 500;
-            margin: 0;
-            display: block;
-            opacity: 0.95;
-            line-height: 1.2;
-        }
-
-        /* Beneficios / Especificaciones (Abajo derecha) */
-        .header-benefits {
-            font-size: 1rem; /* Tamaño normal, legible */
-            opacity: 0.85;
-            display: flex;
-            gap: 15px; /* Espacio entre cada beneficio */
-            justify-content: flex-end; /* Alinear a la derecha */
-            flex-wrap: wrap; /* Para que no se corte en móviles */
-        }
-        .header-benefits span {
-            display: flex;
-            align-items: center;
-            gap: 5px; /* Espacio entre icono y texto */
-        }
-
-        /* 3. Diseño Premium de Tarjetas */
         .card { 
             background: var(--card-bg); 
             padding: 25px; 
             border-radius: 18px; 
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05); 
             border: 1px solid rgba(0,0,0,0.05);
-            transition: transform 0.3s ease;
+            animation: fadeInUp 0.6s ease-out both;
         }
-        .card:hover { transform: translateY(-5px); }
+        /* Retraso de animación para cada tarjeta */
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.4s; }
 
-        h2 { color: var(--acento); font-size: 1.4rem; margin-top: 0; }
-
-        label { font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; display: block; opacity: 0.8; }
+        h2 { color: var(--acento); font-size: 1.4rem; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        label { font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; display: block; }
 
         select, input { 
             width: 100%; padding: 12px; border-radius: 10px; 
@@ -132,6 +75,14 @@
             font-size: 15px; background: var(--card-bg); color: var(--texto);
             box-sizing: border-box;
         }
+
+        .btn-add {
+            background: var(--principal); color: white; border: none;
+            padding: 12px; width: 100%; border-radius: 10px;
+            font-weight: bold; cursor: pointer; margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        .btn-add:hover { background: var(--secundario); }
 
         .btn-enviar { 
             background: var(--acento); color: white; border: none; 
@@ -141,114 +92,99 @@
         }
         .btn-enviar:hover { background: #27ae60; transform: scale(1.02); }
 
-        /* Botón Modo Oscuro */
-        .theme-toggle {
-            position: fixed; top: 20px; right: 20px;
-            background: var(--principal); color: white;
-            border: none; padding: 12px; border-radius: 50%;
-            cursor: pointer; z-index: 1000;
+        .cart-item {
+            background: rgba(46, 204, 113, 0.1); padding: 10px; border-radius: 8px;
+            margin-bottom: 10px; font-size: 0.9rem;
+            display: flex; justify-content: space-between; border-left: 4px solid var(--acento);
         }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; border-radius: 10px; overflow: hidden; }
-        th { background: var(--principal); color: white; padding: 12px; text-align: left; }
-        td { padding: 12px; border-bottom: 1px solid #eee; font-size: 0.85rem; }
-
-        .admin-box { grid-column: span 2; }
+        .theme-toggle { position: fixed; top: 20px; right: 20px; background: var(--principal); color: white; border: none; padding: 12px; border-radius: 50%; cursor: pointer; z-index: 1000; }
     </style>
 </head>
-<body class="">
+<body>
 
 <button class="theme-toggle" onclick="toggleDarkMode()">
     <i id="theme-icon" class="fas fa-moon"></i>
 </button>
 
 <header>
-    <div class="header-content">
-        <div class="header-brand">
-            <h1><i class="fas fa-dog"></i>Allqu Food</h1>
-        </div>
-
-        <div class="header-info">
-            <p><i>"Salud en cada bocado"</i></p>
-            <div class="header-benefits">
-                <span><i class="fas fa-leaf"></i> 100% Natural</span>
-                <span><i class="fas fa-recycle"></i> Eco-Friendly</span>
-            </div>
+    <div class="header-brand"><h1><i class="fas fa-dog"></i> Allqu Food</h1></div>
+    <div class="header-info">
+        <p><i>"Salud en cada bocado"</i></p>
+        <div style="font-size: 0.8rem; opacity: 0.9;">
+            <span><i class="fas fa-leaf"></i> 100% Natural</span> | 
+            <span><i class="fas fa-recycle"></i> Eco-Friendly</span>
         </div>
     </div>
 </header>
 
 <div class="container">
     <div class="card">
-        <h2><i class="fas fa-shopping-basket"></i> Arma tu Pedido</h2>
+        <h2><i class="fas fa-paw"></i> 1. Elige el Producto</h2>
         
-        <label>1. Categoría:</label>
+        <label>Categoría:</label>
         <select id="categoria" onchange="actualizarTamanos()">
             <option value="Premio">Premios</option>
             <option value="Comida">Croquetas</option>
         </select>
 
-        <label>2. Sabor:</label>
+        <label>Sabor:</label>
         <select id="sabor" onchange="mostrarIngredientes()">
             <option value="Higado">Hígado de Pollo</option>
             <option value="Carne">Carne Molida</option>
         </select>
         <div id="txt-ingredientes" style="font-size: 0.8rem; margin-bottom: 15px; color: var(--acento);"></div>
 
-        <label>3. Tamaño:</label>
-        <select id="tamano">
-            </select>
+        <label>Tamaño de Pack:</label>
+        <select id="tamano"></select>
 
+        <label>Cantidad de bolsas:</label>
+        <select id="cantidad">
+            <option value="1">1 bolsa</option>
+            <option value="2">2 bolsas</option>
+            <option value="3">3 bolsas</option>
+            <option value="4">4 bolsas</option>
+            <option value="5">5 bolsas</option>
+        </select>
+
+        <button class="btn-add" onclick="agregarAlCarrito()">
+            <i class="fas fa-plus-circle"></i> Agregar otro producto
+        </button>
+
+        <div id="resumen-temporal">
+            </div>
+
+        <h2 style="margin-top:20px;"><i class="fas fa-user-edit"></i> 2. Datos del Cliente</h2>
         <input type="text" id="clienteNombre" placeholder="Nombre del dueño">
         <input type="text" id="clientecelular" placeholder="Celular de contacto">
         <input type="text" id="direccion" placeholder="Dirección de entrega">
         
-        <button class="btn-enviar" onclick="procesarPedido()">
-            <i class="fab fa-whatsapp"></i> Enviar Pedido
+        <button class="btn-enviar" onclick="finalizarPedido()">
+            <i class="fab fa-whatsapp"></i> Confirmar y Enviar Pedido
         </button>
     </div>
 
     <div class="card">
-        <h2>Resumen de Precios</h2>
-        <div style="font-size: 0.9em;">
+        <h2><i class="fas fa-tags"></i> Resumen de Precios</h2>
+        <div style="font-size: 0.95em; line-height: 1.6;">
             <p><strong>Hígado:</strong><br>
             Mega Pack: S/ 12<br>
             Maxi Pack: S/ 7<br>
             Medium Pack: S/ 4<br>
             Mini Pack: S/ 2.50</p>
+            
             <p><strong>Carne:</strong><br>
             Mega Pack: S/ 18<br>
             Maxi Pack: S/ 10<br>
             Medium Pack: S/ 7.50<br>
             Mini Pack: S/ 4</p>
             <hr>
-            <p>✅ 100% Natural</p>
-            <p>✅ Sin Conservantes</p>
-            <p>✅ Empaques biodegradables</p>
+            <div style="font-size: 0.85rem; opacity: 0.8;">
+                <p>✅ 100% Natural</p>
+                <p>✅ Sin Conservantes</p>
+                <p>✅ Empaques biodegradables</p>
+            </div>
         </div>
-
-    </div>
-
-    <div class="card admin-box">
-        <h2><i class="fas fa-history"></i> Historial de Pedidos</h2>
-        <div style="overflow-x: auto;">
-            <table>
-                <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th>Cliente</th>
-                        <th>Producto</th>
-                        <th>Tamaño</th>
-                        <th>Precio</th>
-                        <th>Fecha</th>
-                    </tr>
-                </thead>
-                <tbody id="tabla-clientes"></tbody>
-            </table>
-        </div>
-        <button onclick="borrarHistorial()" style="color: #e74c3c; background: none; border: none; cursor: pointer; margin-top: 15px;">
-            <i class="fas fa-trash"></i> Limpiar historial
-        </button>
     </div>
 </div>
 
@@ -263,21 +199,7 @@ const ingredientes = {
     "Carne": "Carne molida, huevo, avena, aceite de oliva y camote."
 };
 
-// modo oscuro
-function toggleDarkMode() {
-    document.body.classList.toggle('dark-mode');
-    const icon = document.getElementById('theme-icon');
-    if(document.body.classList.contains('dark-mode')) {
-        icon.classList.replace('fa-moon', 'fa-sun');
-    } else {
-        icon.classList.replace('fa-sun', 'fa-moon');
-    }
-}
-
-function mostrarIngredientes() {
-    const sabor = document.getElementById('sabor').value;
-    document.getElementById('txt-ingredientes').innerHTML = `<i class="fas fa-info-circle"></i> ${ingredientes[sabor]}`;
-}
+let carrito = [];
 
 function actualizarTamanos() {
     const cat = document.getElementById('categoria').value;
@@ -296,83 +218,133 @@ function actualizarTamanos() {
     });
 }
 
-let historial = JSON.parse(localStorage.getItem('pedidos_allqu')) || [];
-actualizarTamanos();
-mostrarIngredientes();
-dibujarTabla();
+function mostrarIngredientes() {
+    const sabor = document.getElementById('sabor').value;
+    document.getElementById('txt-ingredientes').innerHTML = `<i class="fas fa-info-circle"></i> ${ingredientes[sabor]}`;
+}
 
-function procesarPedido() {
+function agregarAlCarrito() {
+    const cat = document.getElementById('categoria').value;
+    const sab = document.getElementById('sabor').value;
+    const tam = document.getElementById('tamano').value;
+    const cant = parseInt(document.getElementById('cantidad').value);
+    
+    const precioUnitario = listaPrecios[sab][tam];
+    const subtotal = precioUnitario * cant;
+
+    const item = {
+        descripcion: `${cat} de ${sab === "Higado" ? "Hígado" : "Carne"} (${tam})`,
+        cantidad: cant,
+        total: subtotal
+    };
+
+    carrito.push(item);
+    renderizarCarrito();
+    
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: 'Producto añadido',
+        showConfirmButton: false,
+        timer: 1500
+    });
+}
+
+function renderizarCarrito() {
+    const div = document.getElementById('resumen-temporal');
+    if(carrito.length === 0) {
+        div.innerHTML = "";
+        return;
+    }
+    
+    let html = "<div style='margin-top:15px; margin-bottom:10px;'><strong>Tu bolsa actual:</strong></div>";
+    carrito.forEach((item, index) => {
+        html += `
+            <div class="cart-item" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <span>${item.cantidad}x ${item.descripcion}</span><br>
+                    <small>S/ ${item.total.toFixed(2)}</small>
+                </div>
+                <button onclick="quitarDelCarrito(${index})" 
+                        style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 1.1rem; padding: 5px;">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </div>`;
+    });
+    div.innerHTML = html;
+}
+
+// Nueva función para eliminar el producto
+function quitarDelCarrito(index) {
+    carrito.splice(index, 1); // Elimina el producto del arreglo por su posición
+    renderizarCarrito(); // Vuelve a dibujar la lista actualizada
+    
+    // Notificación rápida de que se eliminó
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: false
+    });
+    Toast.fire({
+        icon: 'info',
+        title: 'Producto quitado'
+    });
+}
+
+function finalizarPedido() {
     const nom = document.getElementById('clienteNombre').value;
     const cel = document.getElementById('clientecelular').value;
     const dir = document.getElementById('direccion').value;
-    const sab = document.getElementById('sabor').value;
-    const tam = document.getElementById('tamano').value;
-    const cat = document.getElementById('categoria').value;
 
-    if (!nom || !cel || !dir) {
-        Swal.fire({ icon: 'warning', title: 'Campos incompletos', text: 'Por favor, llena todos los datos de contacto.', confirmButtonColor: '#8d6e63' });
+    if (carrito.length === 0) {
+        Swal.fire('Bolsa vacía', 'Agrega al menos un producto antes de enviar.', 'warning');
         return;
     }
 
-    const precio = listaPrecios[sab][tam];
-    const pedido = {
-        orden: historial.length + 1,
-        cliente: nom,
-        sabor: sab === "Higado" ? "Hígado de Pollo" : "Carne Molida",
-        tamano: tam,
-        precio: "S/ " + precio.toFixed(2),
-        fecha: new Date().toLocaleDateString()
-    };
+    if (!nom || !cel || !dir) {
+        Swal.fire('Datos incompletos', 'Por favor llena la sección de Datos del Cliente.', 'warning');
+        return;
+    }
 
-    historial.push(pedido);
-    localStorage.setItem('pedidos_allqu', JSON.stringify(historial));
-    dibujarTabla();
+    let totalVenta = 0;
+    let detalleMsg = "";
+    carrito.forEach(item => {
+        detalleMsg += `- ${item.cantidad} bolsa(s) de ${item.descripcion}\n`;
+        totalVenta += item.total;
+    });
 
-    // toda la parte de whatsapp
+    const msg = `¡Nuevo Pedido Allqu Food!\n\n` +
+                `Cliente: ${nom}\n` +
+                `Celular: ${cel}\n` +
+                `Dirección: ${dir}\n\n` +
+                `Detalle del pedido:\n${detalleMsg}\n` +
+                `TOTAL A PAGAR: S/ ${totalVenta.toFixed(2)}\n\n` +
+                `¡Muchas gracias! Esperamos que tu peludo disfrute su comida saludable.`;
+
+    const url = `https://wa.me/51948869912?text=${encodeURIComponent(msg)}`;
+    
     Swal.fire({
-        title: '¡Excelente elección!',
-        text: "Te estamos redirigiendo a WhatsApp para confirmar tu pedido.",
+        title: '¡Listo!',
+        text: "Te enviamos a WhatsApp para finalizar.",
         icon: 'success',
+        timer: 2000,
         showConfirmButton: false,
-        timer: 2500,
-        didOpen: () => {
-            const msg = `🐾 *¡Nuevo Pedido Allqu Food!* 🐾\n\n*Cliente:* ${nom}\n*Producto:* ${cat} de ${pedido.sabor}\n*Presentación:* ${tam} Pack\n*Total:* ${pedido.precio}\n*Dirección:* ${dir}\n\n¡Gracias! 🐶`;
-            const url = `https://wa.me/51948869912?text=${encodeURIComponent(msg)}`;
-            setTimeout(() => { window.open(url, '_blank'); }, 2000);
-        }
+        didClose: () => { window.open(url, '_blank'); }
     });
 }
 
-function dibujarTabla() {
-    const t = document.getElementById('tabla-clientes');
-    t.innerHTML = historial.map(p => `
-        <tr>
-            <td>${p.orden}</td>
-            <td>${p.cliente}</td>
-            <td>${p.sabor}</td>
-            <td>${p.tamano}</td>
-            <td>${p.precio}</td>
-            <td>${p.fecha}</td>
-        </tr>
-    `).reverse().join('');
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    const icon = document.getElementById('theme-icon');
+    icon.classList.toggle('fa-moon');
+    icon.classList.toggle('fa-sun');
 }
 
-function borrarHistorial() {
-    Swal.fire({
-        title: '¿Borrar todo?',
-        text: "Se eliminará el historial de este dispositivo.",
-        icon: 'danger',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, borrar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            localStorage.removeItem('pedidos_allqu');
-            historial = [];
-            dibujarTabla();
-        }
-    });
-}
+actualizarTamanos();
+mostrarIngredientes();
 </script>
 </body>
 </html>
