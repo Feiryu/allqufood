@@ -4,321 +4,600 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Allqu Food</title>
-
+    
+  
     <meta property="og:title" content="Allqu Food - Salud en cada bocado">
-    <meta property="og:description" content="Premios y croquetas naturales para tu mejor amigo. 🐾">
-    <meta property="og:image" content="https://feiryu.github.io/allqufood/logo-allqu-food.png">
-    <meta property="og:url" content="https://feiryu.github.io/allqufood/">
-    <meta property="og:type" content="website">
+    <meta property="og:description" content="Premios y croquetas naturales para tu mejor amigo.">
+    <meta property="og:image" content="logo-allqu-food1.png">
 
+   
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        beige: { DEFAULT: '#F4F1EB', dark: '#E6E1D6' },
+                        brown: { DEFAULT: '#4A3B32', dark: '#2C231E', light: '#8D6E63' },
+                        black: { DEFAULT: '#111111' },
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['"Montserrat"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Librerías -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="icon" href="logo-allqu-food.png">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        :root { 
-            --principal: #8d6e63; 
-            --secundario: #4e342e; 
-            --acento: #2ecc71; 
-            --fondo: #fdfaf6;
-            --texto: #333;
-            --card-bg: #ffffff;
+        body {
+            background-color: #F4F1EB;
+            color: #111111;
+            overflow-x: hidden;
+            cursor: default;
         }
 
-        body.dark-mode {
-            --fondo: #1a1a1a;
-            --texto: #f0f0f0;
-            --card-bg: #2d2d2d;
-            --principal: #5d4037;
+        .clip-reveal {
+            clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
+        }
+        
+        .img-wrap {
+            overflow: hidden;
+        }
+        
+        .img-wrap img {
+            transform: scale(1.2);
+            will-change: transform;
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            background-color: var(--fondo); 
-            color: var(--texto); 
-            margin: 0; 
-            padding: 20px; 
+        .boutique-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(74, 59, 50, 0.2);
+            padding: 1rem 0;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            color: #111111;
+            width: 100%;
             transition: all 0.3s ease;
+            appearance: none;
+            border-radius: 0;
         }
 
-        .container { max-width: 1000px; margin: auto; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 25px; }
+        .boutique-input:focus {
+            outline: none;
+            border-bottom-color: #4A3B32;
+        }
 
-        header { 
-            grid-column: span 2; 
-            background: linear-gradient(135deg, var(--principal), var(--secundario)); 
-            color: white; 
-            padding: 30px 40px; 
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
+        .boutique-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #8D6E63;
+            margin-bottom: 0.25rem;
+            display: block;
+            font-weight: 600;
+        }
+
+        .btn-editorial {
+            background-color: #111111;
+            color: #FFFFFF;
+            padding: 1.2rem 2rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            transition: all 0.5s ease;
+            display: inline-flex;
             align-items: center;
-            animation: fadeInUp 0.6s ease-out both;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            border: 1px solid #111111;
         }
 
-        .card { 
-            background: var(--card-bg); 
-            padding: 25px; 
-            border-radius: 18px; 
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05); 
-            border: 1px solid rgba(0,0,0,0.05);
-            animation: fadeInUp 0.6s ease-out both;
-        }
-        .card:nth-child(2) { animation-delay: 0.2s; }
-        .card:nth-child(3) { animation-delay: 0.4s; }
-
-        h2 { color: var(--acento); font-size: 1.4rem; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        label { font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; display: block; }
-
-        select, input { 
-            width: 100%; padding: 12px; border-radius: 10px; 
-            border: 2px solid #eee; margin-bottom: 15px; 
-            font-size: 15px; background: var(--card-bg); color: var(--texto);
-            box-sizing: border-box;
+        .btn-editorial:hover {
+            background-color: transparent;
+            color: #111111;
         }
 
-        .btn-add {
-            background: var(--principal); color: white; border: none;
-            padding: 12px; width: 100%; border-radius: 10px;
-            font-weight: bold; cursor: pointer; margin-bottom: 20px;
-            transition: 0.3s;
+        .btn-editorial.inverse {
+            background-color: transparent;
+            color: #4A3B32;
+            border-color: #4A3B32;
         }
-        .btn-add:hover { background: var(--secundario); }
-
-        .btn-enviar { 
-            background: var(--acento); color: white; border: none; 
-            padding: 18px; width: 100%; border-radius: 12px; 
-            font-size: 18px; font-weight: bold; cursor: pointer; 
-            transition: 0.4s; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
-        }
-        .btn-enviar:hover { background: #27ae60; transform: scale(1.02); }
-
-        .cart-item {
-            background: rgba(46, 204, 113, 0.1); padding: 12px; border-radius: 10px;
-            margin-bottom: 10px; font-size: 0.9rem;
-            display: flex; justify-content: space-between; align-items: center;
-            border-left: 4px solid var(--acento);
+        
+        .btn-editorial.inverse:hover {
+            background-color: #4A3B32;
+            color: #FFFFFF;
         }
 
-        .theme-toggle { position: fixed; top: 20px; right: 20px; background: var(--principal); color: white; border: none; padding: 12px; border-radius: 50%; cursor: pointer; z-index: 1000; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #F4F1EB; }
+        ::-webkit-scrollbar-thumb { background: #4A3B32; }
+
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #F4F1EB;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        /* Clase para forzar logo a blanco puro en fondos oscuros */
+        .footer-logo-white {
+            filter: brightness(0) invert(1);
+        }
+
+        /* Contenedor para posicionar la flecha */
+.select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+/* Estilo de la flecha animada */
+.chevron {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 8px;
+    background-color: #4A3B32; /* Color café de tu marca */
+    clip-path: polygon(100% 0%, 0 0%, 50% 100%); /* Forma de triángulo */
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); /* Efecto elástico */
+    pointer-events: none; /* Permite que el clic pase al select */
+}
+
+/* Animación: Cuando el select está activo, la flecha gira */
+.select-wrapper:focus-within .chevron {
+    transform: translateY(-50%) rotate(180deg);
+    background-color: #8D6E63; /* Cambia a café claro al abrir */
+}
+
+/* Ajuste extra para que el texto no pise la flecha */
+.boutique-input {
+    padding-right: 25px !important;
+}
+
     </style>
 </head>
-<body>
+<body class="antialiased selection:bg-brown selection:text-white">
 
-<button class="theme-toggle" onclick="toggleDarkMode()">
-    <i id="theme-icon" class="fas fa-moon"></i>
-</button>
-
-<header>
-    <div class="header-brand"><h1><i class="fas fa-dog"></i> Allqu Food</h1></div>
-    <div class="header-info" style="text-align: right;">
-        <p style="margin:0;"><i>"Salud en cada bocado"</i></p>
-        <div style="font-size: 0.8rem; opacity: 0.9;">
-            <span><i class="fas fa-leaf"></i> 100% Natural</span> | 
-            <span><i class="fas fa-recycle"></i> Eco-Friendly</span>
+    <!-- LOADER -->
+    <div id="loader" aria-hidden="true">
+        <img src="logo-allqu-food1.png" alt="Cargando Allqu Food" class="w-32 h-32 object-contain mb-8 opacity-0" id="loader-logo">
+        <div class="h-[1px] bg-brown/20 w-48 overflow-hidden">
+            <div class="h-full bg-brown w-0" id="loader-bar"></div>
         </div>
     </div>
-</header>
 
-<div class="container">
-    <div class="card">
-        <h2><i class="fas fa-paw"></i> 1. Elige el Producto</h2>
+    <!-- NAVEGACIÓN -->
+    <nav class="fixed top-0 left-0 w-full z-50 px-8 md:px-16 py-6 flex justify-between items-center transition-all duration-500" id="navbar">
+        <div class="flex items-center gap-4">
+            <img src="logo-allqu-food1.png" class="w-12 h-12 object-contain" alt="Allqu Food Logo">
+            <span class="font-serif text-2xl font-semibold tracking-wide text-brown-dark">Allqu Food</span>
+        </div>
+        <div class="hidden md:flex gap-10 font-sans text-xs uppercase tracking-[0.15em] font-medium text-brown">
+            <a href="#filosofia" class="hover:text-black transition-colors">Filosofía</a>
+            <a href="#ingredientes" class="hover:text-black transition-colors">Ingredientes</a>
+            <a href="#boutique" class="hover:text-black transition-colors">Caja</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="min-h-screen relative flex items-center justify-center pt-20 px-6">
+        <div class="absolute inset-0 z-0 overflow-hidden opacity-20">
+            <img src="perro-1.png" class="w-full h-full object-cover parallax-bg" alt="Fondo de textura natural">
+        </div>
         
-        <label>Categoría:</label>
-        <select id="categoria" onchange="actualizarTamanos()">
-            <option value="Premio">Premios</option>
-            <option value="Comida">Croquetas</option>
-        </select>
-
-        <label>Sabor:</label>
-        <select id="sabor" onchange="mostrarIngredientes()">
-            <option value="Higado">Hígado de Pollo</option>
-            <option value="Carne">Carne Molida</option>
-        </select>
-        <div id="txt-ingredientes" style="font-size: 0.8rem; margin-bottom: 15px; color: var(--acento);"></div>
-
-        <label>Tamaño de Pack:</label>
-        <select id="tamano"></select>
-
-        <label>Cantidad de bolsas:</label>
-        <select id="cantidad">
-            <option value="1">1 bolsa</option>
-            <option value="2">2 bolsas</option>
-            <option value="3">3 bolsas</option>
-            <option value="4">4 bolsas</option>
-            <option value="5">5 bolsas</option>
-        </select>
-
-        <button class="btn-add" onclick="agregarAlCarrito()">
-            <i class="fas fa-plus-circle"></i> Agregar otro producto
-        </button>
-
-        <div id="resumen-temporal"></div>
-
-        <h2 style="margin-top:20px;"><i class="fas fa-user-edit"></i> 2. Datos del Cliente</h2>
-        <input type="text" id="clienteNombre" placeholder="Nombre del dueño">
-        <input type="text" id="clientecelular" placeholder="Celular de contacto">
-        <input type="text" id="direccion" placeholder="Dirección de entrega">
-        
-        <button class="btn-enviar" onclick="finalizarPedido()">
-            <i class="fab fa-whatsapp"></i> Confirmar y Enviar Pedido
-        </button>
-    </div>
-
-    <div class="card">
-        <h2><i class="fas fa-tags"></i> Resumen de Precios</h2>
-        <div style="font-size: 0.95em; line-height: 1.6;">
-            <p><strong>Hígado:</strong><br>
-            Mega Pack: S/ 12<br>
-            Maxi Pack: S/ 7<br>
-            Medium Pack: S/ 4<br>
-            Mini Pack: S/ 2.50</p>
+        <div class="relative z-10 text-center max-w-5xl mx-auto flex flex-col items-center">
+            <span class="font-sans text-[10px] uppercase tracking-[0.3em] text-brown mb-8 block font-semibold reveal-text">Profesionales de la nutrición canina</span>
             
-            <p><strong>Carne:</strong><br>
-            Mega Pack: S/ 18<br>
-            Maxi Pack: S/ 10<br>
-            Medium Pack: S/ 7.50<br>
-            Mini Pack: S/ 4</p>
-            <hr>
-            <div style="font-size: 0.85rem; opacity: 0.8;">
-                <p>✅ 100% Natural</p>
-                <p>✅ Sin Conservantes</p>
-                <p>✅ Empaques biodegradables</p>
+            <h1 class="font-serif text-6xl md:text-8xl lg:text-9xl text-black leading-[0.9] mb-10">
+                <span class="block clip-reveal"><i class="text-brown-light">Salud</i> en cada</span>
+                <span class="block clip-reveal">bocado.</span>
+            </h1>
+            
+            <p class="font-sans text-sm md:text-base text-brown-dark max-w-lg leading-relaxed font-light mb-12 reveal-text">
+                La alimentación más saludable para tu canino. Sin procesos industriales, sin ingredientes ocultos. Solo naturaleza y respeto.
+            </p>
+            
+            <a href="#boutique" class="font-sans text-xs uppercase tracking-[0.2em] font-medium border-b border-black pb-2 hover:text-brown hover:border-brown transition-colors reveal-text">
+                Realizar el pedido
+            </a>
+        </div>
+    </section>
+
+    <!-- FILOSOFÍA -->
+    <section id="filosofia" class="py-32 px-6 md:px-16 bg-white">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-12 gap-16 items-center">
+            <div class="lg:col-span-5 lg:col-start-2 space-y-8">
+                <h2 class="font-serif text-5xl md:text-6xl text-black leading-tight">
+                    Filosofía <br> <span class="italic text-brown">de Allqu Food</span>
+                </h2>
+                <div class="w-12 h-[1px] bg-brown"></div>
+                <p class="font-sans text-sm leading-loose text-gray-600 font-light">
+                    En Allqu Food, creemos que los perros no son solo mascotas, sino miembros de la familia que merecen una alimentación saludable y llena de amor. Nuestra filosofía se basa en mantener el bienenestar de nuestros fieles amigos a través de ingredientes naturales, cuidando cada detalle como si fuera para nuestros compañeros de vida. No usamos preservantes, químicos o aditivos artificiales, porque entendemos que una buena alimentación es la base de una vida larga y alegre para tu perro. Valoramos la transpariencia, la calidad y la responsabilidad, seleccionando ingredientes frescos y seguros que aporten beneficios para la salud de cada perro. Más que vender comida, buscamos crear un vínculo entre las personas y sus mascotas, así como fomentar una comunidad que comparta el amor por los animales y la importancia de una nutrición consciente. En Allqu Food, cada bocado es un acto de cariño y compromiso con el bienestar de tu mejor amigo.
+                </p>
+                <div class="grid grid-cols-2 gap-8 pt-8 font-sans text-xs uppercase tracking-widest text-brown-dark font-medium">
+                    <div>
+                        <span class="block text-2xl font-serif text-black mb-2">100%</span>
+                        Natural
+                    </div>
+                    <div>
+                        <span class="block text-2xl font-serif text-black mb-2">0%</span>
+                        Conservantes
+                    </div>
+                </div>
+            </div>
+            <div class="lg:col-span-5 img-wrap aspect-[3/4] rounded-sm">
+                <img src="perro-2.png" alt="Ingredientes frescos y naturales" class="w-full h-full object-cover zoom-img">
             </div>
         </div>
-    </div>
-</div>
+    </section>
 
-<script>
-const listaPrecios = {
-    "Higado": { "Mega": 12, "Maxi": 7, "Medium": 4, "Mini": 2.5 },
-    "Carne": { "Mega": 18, "Maxi": 10, "Medium": 7.5, "Mini": 4 }
-};
+    <!-- INGREDIENTES -->
+    <section id="ingredientes" class="py-32 px-6 md:px-16 bg-brown-dark text-beige">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-24">
+                <span class="font-sans text-[10px] uppercase tracking-[0.2em] opacity-60 mb-4 block">Los ingredientes</span>
+                <h2 class="font-serif text-5xl md:text-7xl">Nuestros productos principales</h2>
+            </div>
 
-const ingredientes = {
-    "Higado": "Hígado de pollo, huevo, avena, aceite de oliva y camote.",
-    "Carne": "Carne molida, huevo, avena, aceite de oliva y camote."
-};
-
-let carrito = [];
-
-function actualizarTamanos() {
-    const cat = document.getElementById('categoria').value;
-    const select = document.getElementById('tamano');
-    select.innerHTML = '';
-    const opts = [
-        {v:'Mega', t: cat==='Comida' ? 'Mega Pack (300g)' : 'Mega Pack (60 und)'},
-        {v:'Maxi', t: cat==='Comida' ? 'Maxi Pack (150g)' : 'Maxi Pack (30 und)'},
-        {v:'Medium', t: cat==='Comida' ? 'Medium Pack (100g)' : 'Medium Pack (20 und)'},
-        {v:'Mini', t: cat==='Comida' ? 'Mini Pack (50g)' : 'Mini Pack (10 und)'}
-    ];
-    opts.forEach(o => {
-        let opt = document.createElement('option');
-        opt.value = o.v; opt.text = o.t;
-        select.appendChild(opt);
-    });
-}
-
-function mostrarIngredientes() {
-    const sabor = document.getElementById('sabor').value;
-    document.getElementById('txt-ingredientes').innerHTML = `<i class="fas fa-info-circle"></i> ${ingredientes[sabor]}`;
-}
-
-function agregarAlCarrito() {
-    const cat = document.getElementById('categoria').value;
-    const sab = document.getElementById('sabor').value;
-    const tam = document.getElementById('tamano').value;
-    const cant = parseInt(document.getElementById('cantidad').value);
-    
-    const precioUnitario = listaPrecios[sab][tam];
-    const subtotal = precioUnitario * cant;
-
-    carrito.push({
-        descripcion: `${cat} de ${sab === "Higado" ? "Hígado" : "Carne"} (${tam})`,
-        cantidad: cant,
-        total: subtotal
-    });
-    renderizarCarrito();
-    
-    Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title: 'Producto añadido',
-        showConfirmButton: false,
-        timer: 1500
-    });
-}
-
-function renderizarCarrito() {
-    const div = document.getElementById('resumen-temporal');
-    if(carrito.length === 0) {
-        div.innerHTML = "";
-        return;
-    }
-    
-    let html = "<div style='margin-top:15px; margin-bottom:10px;'><strong>Tu bolsa actual:</strong></div>";
-    carrito.forEach((item, index) => {
-        html += `
-            <div class="cart-item">
-                <div>
-                    <span>${item.cantidad}x ${item.descripcion}</span><br>
-                    <small>S/ ${item.total.toFixed(2)}</small>
+            <div class="grid md:grid-cols-2 gap-0 border border-beige/20">
+                <div class="p-12 md:p-20 border-b md:border-b-0 md:border-r border-beige/20 group">
+                    <h3 class="font-serif text-4xl mb-6">Hígado de Pollo</h3>
+                    <p class="font-sans text-sm font-light leading-relaxed opacity-80 mb-8">
+                        Hígado de pollo, huevo, avena integral, aceite de oliva y camote.
+                    </p>
+                    <ul class="font-sans text-[10px] uppercase tracking-widest space-y-4 opacity-60">
+                        <li>— Mega Pack / S/ 12.00</li>
+                        <li>— Maxi Pack / S/ 7.00</li>
+                        <li>— Medium Pack / S/ 4.00</li>
+                        <li>— Mini Pack / S/ 2.50</li>
+                    </ul>
                 </div>
-                <button onclick="quitarDelCarrito(${index})" 
-                        style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 1.1rem; padding: 5px;">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
-            </div>`;
-    });
-    div.innerHTML = html;
-}
+                <div class="p-12 md:p-20 group">
+                    <h3 class="font-serif text-4xl mb-6">Carne Molida</h3>
+                    <p class="font-sans text-sm font-light leading-relaxed opacity-80 mb-8">
+                        Carne molida, huevo, avena integral, aceite de oliva y camote.
+                    </p>
+                    <ul class="font-sans text-[10px] uppercase tracking-widest space-y-4 opacity-60">
+                        <li>— Mega Pack / S/ 18.00</li>
+                        <li>— Maxi Pack / S/ 10.00</li>
+                        <li>— Medium Pack / S/ 7.50</li>
+                        <li>— Mini Pack / S/ 4.00</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 
-function quitarDelCarrito(index) {
-    carrito.splice(index, 1);
-    renderizarCarrito();
-}
+    <!-- Caja -->
+    <section id="boutique" class="py-32 px-6 md:px-16 bg-beige">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid lg:grid-cols-12 gap-16 lg:gap-24">
+                
+                <div class="lg:col-span-4 flex flex-col justify-between">
+                    <div>
+                        <h2 class="font-serif text-5xl md:text-7xl text-black mb-8">La<br>Caja.</h2>
+                        <p class="font-sans text-sm font-light text-gray-600 leading-relaxed mb-12">
+                            Personaliza el pedido de tu mascota. Prepararemos todo a mano y coordinaremos la entrega directamente contigo.
+                        </p>
+                    </div>
+                    <div class="hidden lg:block img-wrap aspect-square rounded-sm">
+                        <img src="perro-3.png" alt="Mascota feliz con comida saludable" class="w-full h-full object-cover zoom-img">
+                    </div>
+                </div>
 
-function finalizarPedido() {
-    const nom = document.getElementById('clienteNombre').value;
-    const cel = document.getElementById('clientecelular').value;
-    const dir = document.getElementById('direccion').value;
+                <div class="lg:col-span-8 bg-white p-8 md:p-16 shadow-2xl shadow-brown/5 rounded-sm">
+                    <div class="grid md:grid-cols-2 gap-16">
+                        <div class="space-y-10">
+                            <h3 class="font-serif text-2xl border-b border-beige-dark pb-4">1. Selección</h3>
+                            <div class="space-y-6">
+                                <div class="select-wrapper">
+                                    <label for="categoria" class="boutique-label">Tipo de Producto</label>
+                                    <select id="categoria" class="boutique-input" onchange="actualizarTamanos()">
+                                        <option value="Premio">Premios</option>
+                                        <option value="Comida">Croquetas</option>
+                                    </select>
+                                    <span class="chevron"></span>
+                                </div>
 
-    if (carrito.length === 0 || !nom || !cel || !dir) {
-        Swal.fire('Atención', 'Por favor completa tus datos y agrega productos.', 'warning');
-        return;
-    }
+                                <div class="select-wrapper">
+                                    <label for="sabor" class="boutique-label">Receta Base</label>
+                                    <select id="sabor" class="boutique-input">
+                                        <option value="Higado">Hígado de Pollo</option>
+                                        <option value="Carne">Carne Molida </option>
+                                    </select>
+                                    <span class="chevron"></span>
+                                </div>
+                                <div class="select-wrapper">
+                                    <label for="tamano" class="boutique-label">Formato</label>
+                                    <select id="tamano" class="boutique-input"></select>
+                                    <span class="chevron"></span>
+                                </div>
+                                <div class="select-wrapper">
+                                    <label for="cantidad" class="boutique-label">Cantidad</label>
+                                    <select id="cantidad" class="boutique-input">
+                                        <option value="1">01 Unidad</option>
+                                        <option value="2">02 Unidades</option>
+                                        <option value="3">03 Unidades</option>
+                                        <option value="4">04 Unidades</option>
+                                        <option value="5">05 Unidades</option>
+                                    </select>
+                                    <span class="chevron"></span>
+                                </div>
+                            </div>
+                            <button class="btn-editorial inverse" onclick="agregarAlCarrito()">
+                                <i data-lucide="plus" class="w-4 h-4"></i> Añadir al carrito
+                            </button>
+                        </div>
 
-    let totalVenta = 0;
-    let detalleMsg = "";
-    carrito.forEach(item => {
-        detalleMsg += `- ${item.cantidad} bolsa(s) de ${item.descripcion}\n`;
-        totalVenta += item.total;
-    });
+                        <div class="space-y-10">
+                            <h3 class="font-serif text-2xl border-b border-beige-dark pb-4">2. Tu Carrito</h3>
+                            <div id="resumen-temporal" class="space-y-4 min-h-[150px] font-sans text-sm font-light text-gray-500">
+                                <p class="italic">Tu carrito esta vacío.</p>
+                            </div>
+                            <div class="flex justify-between items-end border-t border-beige-dark pt-6 mb-10">
+                                <span class="boutique-label !mb-0">Total Estimado</span>
+                                <span class="font-serif text-3xl" id="precio-total">S/ 0.00</span>
+                            </div>
+                            <h3 class="font-serif text-2xl border-b border-beige-dark pb-4">3. Datos del Cliente</h3>
+                            <div class="space-y-6">
+                                <div>
+                                    <label for="clienteNombre" class="boutique-label">Nombre del Dueño</label>
+                                    <input type="text" id="clienteNombre" class="boutique-input" placeholder="Ej. Alejo Chavez">
+                                </div>
+                                <div>
+                                    <label for="clienteCelular" class="boutique-label">Contacto (WhatsApp)</label>
+                                    <input type="tel" id="clienteCelular" class="boutique-input" placeholder="Ej. 987474321">
+                                </div>
+                                <div>
+                                    <label for="direccion" class="boutique-label">Dirección de Entrega</label>
+                                    <input type="text" id="direccion" class="boutique-input" placeholder="Avenida, Distrito...">
+                                </div>
+                            </div>
+                            <button class="btn-editorial mt-8" onclick="finalizarPedido()">
+                                Realizar Pedido
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    const msg = `🐾 *¡Nuevo Pedido Allqu Food!* 🐾\n\n` +
-                `*Cliente:* ${nom}\n` +
-                `*Celular:* ${cel}\n` +
-                `*Dirección:* ${dir}\n\n` +
-                `*Detalle:*\n${detalleMsg}\n` +
-                `*TOTAL: S/ ${totalVenta.toFixed(2)}*\n\n` +
-                `¡Muchas gracias! 🐶`;
+    <!-- FOOTER -->
+    <footer class="bg-black text-beige py-24 px-6 md:px-16 text-center md:text-left">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12 border-b border-white/10 pb-16 mb-8">
+            <div class="flex items-center gap-6">
+               
+                    <h2 class="font-serif text-3xl md:text-4xl mb-2">Allqu Food</h2>
+                    <p class="font-sans text-[10px] uppercase tracking-[0.2em] opacity-60">Salud en cada bocado</p>
+                </div>
+            </div>
+            <div class="flex flex-col md:items-end font-sans text-[10px] uppercase tracking-widest opacity-80 gap-4">
+                <a href="#" class="hover:text-white transition-colors">Instagram: Allqufood.pe</a>
+                <span>WhatsApp: +51 948 869 912</span>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between font-sans text-[9px] uppercase tracking-widest opacity-40">
+            <p>&copy; 2024 Allqu Food. Siempre contigo.</p>
+            <p>100% Saludable. Lima, Perú.</p>
+        </div>
+    </footer>
 
-    window.open(`https://wa.me/51948869912?text=${encodeURIComponent(msg)}`, '_blank');
-}
+    <script>
+        const listaPrecios = {
+            "Higado": { "Mega": 12, "Maxi": 7, "Medium": 4, "Mini": 2.5 },
+            "Carne": { "Mega": 18, "Maxi": 10, "Medium": 7.5, "Mini": 4 }
+        };
 
-function toggleDarkMode() {
-    document.body.classList.toggle('dark-mode');
-}
+        let carrito = [];
 
-actualizarTamanos();
-mostrarIngredientes();
-</script>
+        function actualizarTamanos() {
+            const cat = document.getElementById('categoria').value;
+            const select = document.getElementById('tamano');
+            if(!select) return;
+            
+            select.innerHTML = '';
+            const opts = [
+                {v:'Mega', t: cat==='Comida' ? 'Mega Pack (300g)' : 'Mega Pack (60 und)'},
+                {v:'Maxi', t: cat==='Comida' ? 'Maxi Pack (150g)' : 'Maxi Pack (30 und)'},
+                {v:'Medium', t: cat==='Comida' ? 'Medium Pack (100g)' : 'Medium Pack (20 und)'},
+                {v:'Mini', t: cat==='Comida' ? 'Mini Pack (50g)' : 'Mini Pack (10 und)'}
+            ];
+            opts.forEach(o => {
+                let opt = document.createElement('option');
+                opt.value = o.v; opt.text = o.t;
+                select.appendChild(opt);
+            });
+        }
+
+        function agregarAlCarrito() {
+            const cat = document.getElementById('categoria').value;
+            const sab = document.getElementById('sabor').value;
+            const tam = document.getElementById('tamano').value;
+            const cantInput = document.getElementById('cantidad');
+            const cant = parseInt(cantInput.value);
+            
+            if (!listaPrecios[sab] || !listaPrecios[sab][tam]) return;
+
+            const subtotal = listaPrecios[sab][tam] * cant;
+
+            carrito.push({
+                descripcion: `${cat} ${sab === "Higado" ? "Hígado" : "Carne"} - ${tam}`,
+                cantidad: cant,
+                total: subtotal
+            });
+            renderizarCarrito();
+
+            Swal.fire({
+                toast: true,
+                position: 'bottom-end',
+                icon: 'success',
+                title: 'Añadido a tu bolsa',
+                showConfirmButton: false,
+                timer: 2000,
+                background: '#F4F1EB',
+                color: '#111111',
+                iconColor: '#4A3B32'
+            });
+        }
+
+        function renderizarCarrito() {
+            const div = document.getElementById('resumen-temporal');
+            const totalDiv = document.getElementById('precio-total');
+            
+            if(carrito.length === 0) { 
+                div.innerHTML = '<p class="italic text-gray-400">Tu selección está vacía.</p>'; 
+                totalDiv.innerText = "S/ 0.00";
+                return; 
+            }
+            
+            let html = "";
+            let granTotal = 0;
+            carrito.forEach((item, index) => {
+                granTotal += item.total;
+                html += `
+                    <div class="flex justify-between items-center border-b border-beige-dark pb-3 mb-3">
+                        <div>
+                            <p class="font-sans text-xs font-semibold text-black">${item.cantidad}x ${item.descripcion}</p>
+                            <p class="font-serif italic text-gray-500">S/ ${item.total.toFixed(2)}</p>
+                        </div>
+                        <button onclick="quitarDelCarrito(${index})" class="text-gray-400 hover:text-brown transition-colors p-2" title="Eliminar">
+                            <i data-lucide="x" class="w-4 h-4"></i>
+                        </button>
+                    </div>`;
+            });
+            div.innerHTML = html;
+            totalDiv.innerText = `S/ ${granTotal.toFixed(2)}`;
+            lucide.createIcons();
+        }
+
+        function quitarDelCarrito(index) {
+            carrito.splice(index, 1);
+            renderizarCarrito();
+
+            Swal.fire({
+                toast: true,
+                position: 'bottom-end',
+                icon: 'info',
+                title: 'Producto eliminado de la bolsa',
+                showConfirmButton: false,
+                timer: 2000,
+                background: '#F4F1EB',
+                color: '#111111',
+                iconColor: '#4A3B32'
+            });
+        }
+
+        function finalizarPedido() {
+            const nom = document.getElementById('clienteNombre').value.trim();
+            const cel = document.getElementById('clienteCelular').value.trim();
+            const dir = document.getElementById('direccion').value.trim();
+
+            if (carrito.length === 0) {
+                Swal.fire({ icon: 'warning', title: 'Bolsa vacía', text: 'Agrega al menos un producto para continuar.', confirmButtonColor: '#111111' });
+                return;
+            }
+
+            if (!nom || !dir || !cel) {
+                Swal.fire({ icon: 'warning', title: 'Datos incompletos', text: 'Por favor, completa tus datos de entrega para procesar el pedido.', confirmButtonColor: '#111111' });
+                return;
+            }
+
+            let totalVenta = 0;
+            let detalleMsg = "";
+            carrito.forEach(item => {
+                detalleMsg += `• ${item.cantidad}x ${item.descripcion}\n`;
+                totalVenta += item.total;
+            });
+
+            const msg = `ALLQU FOOD\n` +
+                        `Titular: ${nom}\n` +
+                        `Contacto: ${cel}\n` +
+                        `Destino: ${dir}\n\n` +
+                        `Selección: \n${detalleMsg}\n` +
+                        `Total Estimado: S/ ${totalVenta.toFixed(2)}\n` +
+                        `!Gracias por confiar en nosotros!`;
+
+            Swal.fire({
+                title: '¡Pedido listo!',
+                text: 'Te estamos redirigiendo a WhatsApp para coordinar la entrega.',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 2500,
+                timerProgressBar: true,
+                background: '#F4F1EB',
+                color: '#111111',
+                iconColor: '#4A3B32',
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            setTimeout(() => {
+                window.open(`https://wa.me/51948869912?text=${encodeURIComponent(msg)}`, '_blank');
+            }, 1500);
+        }
+
+        // Inicialización de Scripts Visuales
+        lucide.createIcons();
+        gsap.registerPlugin(ScrollTrigger);
+
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline();
+            tl.to("#loader-logo", { opacity: 1, duration: 1, ease: "power2.out" })
+              .to("#loader-bar", { width: "100%", duration: 1.5, ease: "power2.inOut" }, "-=0.5")
+              .to("#loader", { yPercent: -100, duration: 1.2, ease: "expo.inOut" })
+              .from(".reveal-text", { y: 30, opacity: 0, duration: 1, stagger: 0.2, ease: "power3.out" }, "-=0.5")
+              .to(".clip-reveal", { clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0% 100%)", duration: 1.5, stagger: 0.2, ease: "power4.out" }, "-=1");
+        });
+
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-beige/90', 'backdrop-blur-md', 'shadow-sm', 'py-4');
+                nav.classList.remove('py-6');
+            } else {
+                nav.classList.remove('bg-beige/90', 'backdrop-blur-md', 'shadow-sm', 'py-4');
+                nav.classList.add('py-6');
+            }
+        });
+
+        gsap.to(".parallax-bg", {
+            y: "20%",
+            ease: "none",
+            scrollTrigger: { trigger: ".parallax-bg", start: "top top", end: "bottom top", scrub: true }
+        });
+
+        gsap.utils.toArray('.img-wrap').forEach(wrap => {
+            const img = wrap.querySelector('img');
+            gsap.to(img, {
+                scale: 1,
+                ease: "power2.out",
+                scrollTrigger: { trigger: wrap, start: "top 80%", end: "bottom 20%", scrub: 1 }
+            });
+        });
+
+        actualizarTamanos();
+    </script>
 </body>
 </html>
