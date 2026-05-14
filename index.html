@@ -14,7 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="icon" href="https://feiryu.github.io/allqufood/logo-allqu-food.png">
+    <link rel="icon" href="logo-allqu-food.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -143,18 +143,15 @@
             flex-direction: column;
         }
 
-        /* Clase para forzar logo a blanco puro en fondos oscuros */
         .footer-logo-white {
             filter: brightness(0) invert(1);
         }
 
-        /* Contenedor para posicionar la flecha */
 .select-wrapper {
     position: relative;
     width: 100%;
 }
 
-/* Estilo de la flecha animada */
 .chevron {
     position: absolute;
     right: 5px;
@@ -162,19 +159,17 @@
     transform: translateY(-50%);
     width: 12px;
     height: 8px;
-    background-color: #4A3B32; /* Color café de tu marca */
-    clip-path: polygon(100% 0%, 0 0%, 50% 100%); /* Forma de triángulo */
-    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); /* Efecto elástico */
-    pointer-events: none; /* Permite que el clic pase al select */
+    background-color: #4A3B32; 
+    clip-path: polygon(100% 0%, 0 0%, 50% 100%); 
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); 
+    pointer-events: none; 
 }
 
-/* Animación: Cuando el select está activo, la flecha gira */
 .select-wrapper:focus-within .chevron {
     transform: translateY(-50%) rotate(180deg);
-    background-color: #8D6E63; /* Cambia a café claro al abrir */
+    background-color: #8D6E63; 
 }
 
-/* Ajuste extra para que el texto no pise la flecha */
 .boutique-input {
     padding-right: 25px !important;
 }
@@ -183,7 +178,6 @@
 </head>
 <body class="antialiased selection:bg-brown selection:text-white">
 
-    <!-- LOADER -->
     <div id="loader" aria-hidden="true">
         <img src="logo-allqu-food1.png" alt="Cargando Allqu Food" class="w-32 h-32 object-contain mb-8 opacity-0" id="loader-logo">
         <div class="h-[1px] bg-brown/20 w-48 overflow-hidden">
@@ -191,7 +185,6 @@
         </div>
     </div>
 
-    <!-- NAVEGACIÓN -->
     <nav class="fixed top-0 left-0 w-full z-50 px-8 md:px-16 py-6 flex justify-between items-center transition-all duration-500" id="navbar">
         <div class="flex items-center gap-4">
             <img src="logo-allqu-food1.png" class="w-12 h-12 object-contain" alt="Allqu Food Logo">
@@ -204,7 +197,6 @@
         </div>
     </nav>
 
-    <!-- HERO -->
     <section class="min-h-screen relative flex items-center justify-center pt-20 px-6">
         <div class="absolute inset-0 z-0 overflow-hidden opacity-20">
             <img src="perro-1.png" class="w-full h-full object-cover parallax-bg" alt="Fondo de textura natural">
@@ -228,7 +220,6 @@
         </div>
     </section>
 
-    <!-- FILOSOFÍA -->
     <section id="filosofia" class="py-32 px-6 md:px-16 bg-white">
         <div class="max-w-7xl mx-auto grid lg:grid-cols-12 gap-16 items-center">
             <div class="lg:col-span-5 lg:col-start-2 space-y-8">
@@ -256,7 +247,6 @@
         </div>
     </section>
 
-    <!-- INGREDIENTES -->
     <section id="ingredientes" class="py-32 px-6 md:px-16 bg-brown-dark text-beige">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-24">
@@ -388,7 +378,6 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer class="bg-black text-beige py-24 px-6 md:px-16 text-center md:text-left">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12 border-b border-white/10 pb-16 mb-8">
             <div class="flex items-center gap-6">
@@ -563,7 +552,6 @@
             }, 1500);
         }
 
-        // Inicialización de Scripts Visuales
         lucide.createIcons();
         gsap.registerPlugin(ScrollTrigger);
 
